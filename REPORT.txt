@@ -1,0 +1,3 @@
+- List all variants of the "add" instruction, explain why each is needed
+
+- What is an emulator? What is memory mapped I/O?

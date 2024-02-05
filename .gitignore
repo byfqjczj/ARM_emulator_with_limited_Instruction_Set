@@ -1,0 +1,5 @@
+build/
+*.diff
+*.result
+*.out
+*.time
