@@ -65,8 +65,6 @@ uint64_t loadElf(char const * const fileName) {
                 auto byte = dataPtr[i];
                 mem_write8(addr, byte);
             }
-            
-            
         }
         
         progHeader = reinterpret_cast<program_header*>(((uintptr_t) progHeader) + entry_size);
