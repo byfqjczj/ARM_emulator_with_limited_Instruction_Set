@@ -46,4 +46,5 @@ extern void STRBTWO(string s);
 
 extern void STRBTHREE(string s);
 
+extern void ORR(string s);
 #endif

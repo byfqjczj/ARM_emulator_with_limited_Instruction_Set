@@ -19,9 +19,9 @@ int main(int argc, char** argv) {
         {   
             PC=CBNZ(s,PC);
         }
-
         else if(s[0]=='1'&&s.substr(3,5)=="10000")
         {
+            //cout<<"ADRP CALLED"<<endl;
             ADRP(s,PC);
         }
         else if(s.substr(1,8)=="00100010")
@@ -56,12 +56,10 @@ int main(int argc, char** argv) {
         {
             LDRBTHREE(s);
         }
-        /*
         else if(s.substr(1,8)=="01100100")
         {
-            ORR();
+            ORR(s);
         }
-        */
         else if(s.substr(0,11)=="00111000000"&&s.substr(20,2)=="01")
         {
             STRBONE(s);
@@ -79,14 +77,14 @@ int main(int argc, char** argv) {
             fail(PC);
             return 0;
         }
+        //fail(PC);
         PC +=4;
     }
     /*
-    ADRP("10010000000000000000000000000001",PC);
+    ADRP("10010000000000000000000010000000",PC);
     PC+=4;
-    ADDI("10010001000001101010000000100001");
+    ADDI("10010001000001101010110000000000");
     PC+=4;
-    MOVZ("01010010100000000000110100000000");
     fail(PC);
     */
     return 0;
