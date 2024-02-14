@@ -80,13 +80,6 @@ int main(int argc, char** argv) {
         //fail(PC);
         PC +=4;
     }
-    /*
-    ADRP("10010000000000000000000010000000",PC);
-    PC+=4;
-    ADDI("10010001000001101010110000000000");
-    PC+=4;
-    fail(PC);
-    */
     return 0;
     //lel
 }

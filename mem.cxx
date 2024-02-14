@@ -402,15 +402,17 @@ void LDRBTHREE(string s)
     long regNum2 = set2.to_ulong();
     int rNum2 = (int) regNum2;
     string oops = s.substr(10,12);
-    oops = oops + "0";
+    //oops = oops + "0";
     while(oops.size()!=64)
     {
         oops = "0" + oops;
     }
     bitset<64> b1(oops);
     uint64_t val1 = b1.to_ullong();
+    //cout << hex << val1 << endl;
     uint64_t temp1 = rgster[rNum2];
     temp1 = temp1 + val1;
+    //cout << hex << temp1 << endl;
     //rgster[rNum2] = temp1;
     uint8_t track = umap[temp1];
     rgster[rNum1]=static_cast<uint64_t>(track);
@@ -437,7 +439,7 @@ void STRBONE(string s)
     if(temp1 == 0xFFFFFFFFFFFFFFFF)
     {
         uint8_t temp = static_cast<uint8_t>(rgster[rNum1]);
-        //cout << (int) temp << endl;
+        //cout << (int) temp;
         cout << (char) temp;
         temp1 = temp1 +val1;
         return;
@@ -469,7 +471,7 @@ void STRBTWO(string s)
     if(temp1 == 0xFFFFFFFFFFFFFFFF)
     {
         uint8_t temp = static_cast<uint8_t>(rgster[rNum1]);
-        //cout << (int) temp << endl;
+        //cout << (int) temp;
         cout << (char) temp;
         return;
     }
@@ -499,7 +501,7 @@ void STRBTHREE(string s)
     if(temp1 == 0xFFFFFFFFFFFFFFFF)
     {
         uint8_t temp = static_cast<uint8_t>(rgster[rNum1]);
-        //cout << (int) temp << endl;
+        //cout << (int) temp;
         cout << (char) temp;
         return;
     }
