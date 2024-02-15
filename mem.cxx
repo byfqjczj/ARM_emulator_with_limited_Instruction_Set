@@ -343,6 +343,7 @@ void LDRTHREE(string s)
 }
 void LDRBONE(string s)
 {
+
     string regStr1 = s.substr(27,5);
     bitset<5> set(regStr1);
     long regNum1 = set.to_ulong();
@@ -358,16 +359,21 @@ void LDRBONE(string s)
     }
     bitset<64> b1(oops);
     uint64_t val1 = b1.to_ullong();
+    //cout << "LDRBONE" << endl;
+    //cout << hex << rNum2 << endl;
     uint64_t temp1 = rgster[rNum2];
+    //cout << hex << temp1 << endl;
     uint8_t track = umap[temp1];
     rgster[rNum1]=static_cast<uint64_t>(track);
     temp1 = temp1 + val1;
+    //cout << hex << temp1 << endl;
     rgster[rNum2] = temp1;
     return;
     
 }
 void LDRBTWO(string s)
 {
+    
     string regStr1 = s.substr(27,5);
     bitset<5> set(regStr1);
     long regNum1 = set.to_ulong();
@@ -386,6 +392,8 @@ void LDRBTWO(string s)
     uint64_t temp1 = rgster[rNum2];
     temp1 = temp1 + val1;
     rgster[rNum2] = temp1;
+    //cout << "LDRBTWO" << endl;
+    //cout<<hex<<temp1<<endl;
     uint8_t track = umap[temp1];
     rgster[rNum1]=static_cast<uint64_t>(track);
     return;
@@ -393,6 +401,7 @@ void LDRBTWO(string s)
 }
 void LDRBTHREE(string s)
 {
+    //cout << "LDRBTHREE" << endl;
     string regStr1 = s.substr(27,5);
     bitset<5> set(regStr1);
     long regNum1 = set.to_ulong();
@@ -411,10 +420,13 @@ void LDRBTHREE(string s)
     uint64_t val1 = b1.to_ullong();
     //cout << hex << val1 << endl;
     uint64_t temp1 = rgster[rNum2];
+    //cout << hex << temp1 << endl;
     temp1 = temp1 + val1;
+    //cout<<hex<<temp1<<endl;
     //cout << hex << temp1 << endl;
     //rgster[rNum2] = temp1;
     uint8_t track = umap[temp1];
+    //cout << static_cast<unsigned>(track) << endl;
     rgster[rNum1]=static_cast<uint64_t>(track);
     return;
 }
@@ -444,7 +456,9 @@ void STRBONE(string s)
         temp1 = temp1 +val1;
         return;
     }
+    //cout<<hex<<temp1<<endl;
     umap[temp1] = static_cast<uint8_t>(rgster[rNum1]);
+    //cout<<static_cast<unsigned>(umap[temp1])<<endl;
     temp1 = temp1 + val1;
     rgster[rNum2] = temp1;
     return;
@@ -475,7 +489,10 @@ void STRBTWO(string s)
         cout << (char) temp;
         return;
     }
+    //cout<<hex<<temp1<<endl;
     umap[temp1] = static_cast<uint8_t>(rgster[rNum1]);
+    //cout<<static_cast<unsigned>(umap[temp1])<<endl;
+    rgster[rNum2] = temp1;
     return;
 }
 void STRBTHREE(string s)
@@ -489,7 +506,7 @@ void STRBTHREE(string s)
     long regNum2 = set2.to_ulong();
     int rNum2 = (int) regNum2;
     string oops = s.substr(10,12);
-    oops = oops + "0";
+    //oops = oops + "0";
     while(oops.size()!=64)
     {
         oops = "0" + oops;
@@ -498,6 +515,7 @@ void STRBTHREE(string s)
     uint64_t val1 = b1.to_ullong();
     uint64_t temp1 = rgster[rNum2];
     temp1 = temp1 + val1;
+    //cout << hex << temp1 << endl;
     if(temp1 == 0xFFFFFFFFFFFFFFFF)
     {
         uint8_t temp = static_cast<uint8_t>(rgster[rNum1]);
@@ -733,176 +751,6 @@ void ORR(string s)
         return;
     }
 }
-    /*
-    if(s[0]=='0')
-    {
-        int leadLoc = 5;
-        int iter = 0;
-        for(int i=0;i<6;i++)
-        {
-            iter++;
-            if(imms[i]=='0')
-            {
-                break;
-            }
-            leadLoc--;
-        }
-        int l = (int) leadLoc;
-        string sb = imms.substr(iter,l);
-        long consOnes = bitstringToUint32(sb);
-        string bruh = "";
-        for(int i=0;i<=(int) consOnes;i++)
-        {
-            bruh=bruh+"1";
-        } 
-        int bitcount = pow(2,leadLoc);
-        int repeat = 32 / bitcount;
-        while(bruh.size()!=(unsigned long)bitcount)
-        {
-            bruh = "0" + bruh;
-        }
-        for(int i=0;i<repeat;i++)
-        {
-            bruh = bruh + bruh;
-        }
-        long rotate = bitstringToUint32(immr);
-        for(int i=0;i<(int) rotate;i++)
-        {
-            char temp = bruh[31];
-            for(int j=30;j>=0;j--)
-            {
-                bruh[j+1]=bruh[j];
-            }
-            bruh[0]=temp;
-        }
-        uint32_t compare = static_cast<uint32_t>(rgster[rNum2]);
-        bitset<32> cm(compare);
-        string comp = cm.to_string();
-        string toRet = "";
-        for(int i=0;i<32;i++)
-        {
-            if(comp[i]=='0'&&bruh[i]==0)
-            {
-                toRet = toRet + "0";
-            }
-            else
-            {
-                toRet = toRet + "1";
-            }
-        }
-        bitset<32> b3(toRet);
-        uint32_t ret = b3.to_ulong();
-        rgster[rNum1]=static_cast<uint64_t>(ret);
-    }
-    else
-    {
-        char n = s[9];
-        if(n=='0')
-        {
-            int leadLoc = 5;
-            int iter = 0;
-            for(int i=0;i<6;i++)
-            {
-                iter++;
-                if(imms[i]=='0')
-                {
-                    break;
-                }
-                leadLoc--;
-            }
-            int l = leadLoc;
-            string sb = imms.substr(iter,l);
-            long consOnes = bitstringToUint32(sb);
-            string bruh = "";
-            for(int i=0;i<=(int) consOnes;i++)
-            {
-                bruh=bruh+"1";
-            } 
-            int bitcount = pow(2,leadLoc);
-            int repeat = 64 / bitcount;
-            while(bruh.size()!=(unsigned long)bitcount)
-            {
-                bruh = "0" + bruh;
-            }
-            for(int i=0;i<repeat;i++)
-            {
-                bruh = bruh + bruh;
-            }
-            
-            long rotate = bitstringToUint32(immr);
-            for(int i=0;i<(int) rotate;i++)
-            {
-                char temp = bruh[63];
-                for(int j=62;j>=0;j--)
-                {
-                    bruh[j+1]=bruh[j];
-                }
-                bruh[0]=temp;
-            }
-            uint64_t compare = static_cast<uint64_t>(rgster[rNum2]);
-            bitset<64> cm(compare);
-            string comp = cm.to_string();
-            string toRet = "";
-            for(int i=0;i<64;i++)
-            {
-                if(comp[i]=='0'&&bruh[i]==0)
-                {
-                    toRet = toRet + "0";
-                }
-                else
-                {
-                    toRet = toRet + "1";
-                }
-            }
-            bitset<64> b3(toRet);
-            uint64_t ret = b3.to_ullong();
-            rgster[rNum1]=static_cast<uint64_t>(ret);
-        }
-        if(n=='1')
-        {
-            bitset<6> r1(imms);
-            uint32_t numberOfOne = r1.to_ulong()+1;
-            string s = "";
-            for(int i=0;i<(int)numberOfOne;i++)
-            {
-                s=s+"1";
-            }
-            while(s.size()!=64)
-            {
-                s="0"+s;
-            }
-            bitset<6> r2(immr);
-            long rotations = r2.to_ulong();
-            for(int i=0;i<(int)rotations;i++)
-            {
-                char temp = s[63];
-                for(int j=62;j>=0;j--)
-                {
-                    s[j+1]=s[j];
-                }
-                s[0]=temp;
-            }
-            uint64_t compare = static_cast<uint64_t>(rgster[rNum2]);
-            bitset<64> cm(compare);
-            string comp = cm.to_string();
-            string toRet = "";
-            for(int i=0;i<64;i++)
-            {
-                if(comp[i]=='0'&&s[i]==0)
-                {
-                    toRet = toRet + "0";
-                }
-                else
-                {
-                    toRet = toRet + "1";
-                }
-            }
-            bitset<64> b3(toRet);
-            uint64_t ret = b3.to_ullong();
-            rgster[rNum1]=static_cast<uint64_t>(ret);
-        }
-    }
-    */
 //getting opcode works
 string opcode(uint64_t addr) 
 {
