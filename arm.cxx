@@ -12,6 +12,10 @@ int main(int argc, char** argv) {
     }
     uint64_t entry = loadElf(argv[1]);
     uint64_t PC = entry;
+    //this while loop executes one command at a time
+    //a big if else block is used to detect what ARM command we should use
+    //after each command execution, move the PC by 4
+    //if the command cannot be recognized, we fail and print out everything
     while(!checkFailure())
     {
         string s = opcode(PC);

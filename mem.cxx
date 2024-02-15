@@ -9,7 +9,7 @@
 #include <cstdint>
 #include <cmath>
 using namespace std;
-
+//create a 32 sized array to simulate the register, and a hashmap that maps a uint64 address to a uint8 to serve as memory
 uint64_t rgster[32];
 unordered_map<uint64_t,uint8_t> umap;
 bool failOrNot = false;
@@ -17,7 +17,8 @@ void mem_write8(uint64_t addr, uint8_t data)
 {
     umap[addr]=data;
 }
-//branching works
+//the logic for these functions follows by first analyzing the OPCODE for data, then performing actions demanded by the operation type and operation information
+//branching resets the PC to the value that I calculate
 uint64_t CBNZ(string s, uint64_t PC)
 {
     string regStr = s.substr(27,5);
@@ -52,7 +53,7 @@ uint64_t CBNZ(string s, uint64_t PC)
     PC = PC + toAdd - 4;
     return PC;
 }
-//working
+//ADRP simply pages and adds the correct value to the intended register
 void ADRP(string s, uint64_t PC)
 {
     string regStr = s.substr(27,5);
@@ -83,7 +84,7 @@ void ADRP(string s, uint64_t PC)
     rgster[rNum]=val3;
     return;
 }
-//works?
+//adds a set value to a register value
 void ADDI(string s)
 {
     string regStr1 = s.substr(27,5);
@@ -161,7 +162,7 @@ uint64_t concatenate_uint8_to_uint64(uint8_t a, uint8_t b, uint8_t c, uint8_t d,
     
     return result;
 }
-
+//the three LDR method gets the next 4-8 bytes of data
 void LDRONE(string s)
 {
     string regStr1 = s.substr(27,5);
@@ -341,6 +342,7 @@ void LDRTHREE(string s)
     }
     return;
 }
+//similar to LDR< but get only 1 byte
 void LDRBONE(string s)
 {
 
@@ -430,6 +432,7 @@ void LDRBTHREE(string s)
     rgster[rNum1]=static_cast<uint64_t>(track);
     return;
 }
+//writes to memory for STRB
 void STRBONE(string s)
 {
     string regStr1 = s.substr(27,5);
@@ -526,7 +529,7 @@ void STRBTHREE(string s)
     umap[temp1] = static_cast<uint8_t>(rgster[rNum1]);
     return;
 }
-//movz works
+//movz moves a number into register
 void MOVZ(string s)
 {
     string regStr1 = s.substr(27,5);
@@ -674,6 +677,7 @@ uint64_t DecodeBitMask(string N, string imms, string immr, int datasize){
     //cout << hex << toRetHere << endl;
     return toRetHere;
 }
+//this one does ORR with a register value and an encoded bitmask
 void ORR(string s)
 {
     string regStr1 = s.substr(27,5);
