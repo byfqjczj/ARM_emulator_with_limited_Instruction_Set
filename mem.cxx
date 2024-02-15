@@ -547,6 +547,115 @@ uint32_t bitstringToUint32(const string& bitstring) {
 
     return std::bitset<32>(paddedBitstring).to_ulong();
 }
+uint64_t DecodeBitMask(string N, string imms, string immr, int datasize){
+    string notimms;
+    //cout << imms << endl;
+    for(char c : imms)
+    {
+        if(c=='0')
+        {
+            notimms = notimms + '1';
+        }
+        else
+        {
+            notimms = notimms + '0';
+        }
+    }
+    //get highest 1 bit
+    //cout << N << endl;
+    string concat1 = N + notimms;
+    //cout << concat1 << endl;
+    int concatLen = (int) concat1.size() -1;
+    int highestSetBit;
+    for(char c : concat1)
+    {
+        if(c=='1')
+        {
+            highestSetBit = concatLen;
+            break;
+        }
+        else
+        {
+            concatLen--;
+        }
+    }
+    //cout << highestSetBit<<endl;
+    //getting the pattern string
+    string levelStr = "";
+    for(int i = 0;i<highestSetBit;i++)
+    {
+        levelStr = levelStr + '1';
+    }
+    while((int)levelStr.size()!=6)
+    {
+        levelStr = "0" + levelStr;
+    }
+    string s = "";
+    string r = "";
+    for(int i=0;i<6;i++)
+    {
+        if(levelStr[i]=='1'&&imms[i]=='1')
+        {
+            s=s+'1';
+        }
+        else
+        {
+            s=s+'0';
+        }
+        if(levelStr[i]=='1'&&immr[i]=='1')
+        {
+            r=r+'1';
+        }
+        else
+        {
+            r=r+'0';
+        }
+    }
+    bitset<6> bsets(s);
+    bitset<6> bsetr(r);
+    int sLong = (int)bsets.to_ulong();
+    int rLong = (int)bsetr.to_ulong();
+    int diff = sLong - rLong;
+    int esize = 1 << highestSetBit;
+    bitset<sizeof(diff)*8> diffBset(diff);
+    string diffStr = diffBset.to_string();
+    /*string tempD = "";
+    for(int i = 0;i<len;i++)
+    {
+        int diffStrLen = (int) diffStr.size()-1;
+        tempD = diffSr[diffStrLen-i] + tempD;
+    }
+    */
+    string welem = "";
+    for(int i = 0;i<sLong+1;i++)
+    {
+        welem = welem + "1";
+    }
+    while((int) welem.size()!=esize)
+    {
+        welem = "0"+welem;
+    }
+    string wmask = "";
+    int rep = datasize / esize;
+    for(int i=0;i<rLong;i++)
+    {
+        int welemLen = (int)welem.size();
+        char c =  welem[welemLen-1];
+        for(int j = welemLen-2;j>=0;j--)
+        {
+            welem[j+1]=welem[j];
+        }
+        welem[0]=c;
+    }
+    for(int i=0;i<rep;i++)
+    {
+        wmask=wmask + welem;
+    }
+    bitset<64> bruh(wmask);
+    uint64_t toRetHere = bruh.to_ullong();
+    //cout << hex << toRetHere << endl;
+    return toRetHere;
+}
 void ORR(string s)
 {
     string regStr1 = s.substr(27,5);
@@ -557,8 +666,74 @@ void ORR(string s)
     bitset<5> set2(regStr2);
     long regNum2 = set2.to_ulong();
     int rNum2 = (int) regNum2;
-    string imms = s.substr(16,6);
-    string immr = s.substr(10,6);
+    string temp2 = s.substr(16,6);
+    string temp3 = s.substr(10,6);
+    char bruhmoment = s[9];
+    //cout<<bruhmoment << endl;
+    string temp1;
+    temp1 += bruhmoment;
+    int datasize;
+    if(s[0]=='0')
+    {
+        datasize=32;
+    }
+    else
+    {
+        datasize=64;
+    }
+    uint64_t maskedContent = DecodeBitMask(temp1, temp2, temp3, datasize);
+    if(s[0]=='0')
+    {
+        uint32_t content32 = static_cast<uint32_t>(maskedContent);
+        uint32_t reg32 = static_cast<uint32_t>(rgster[rNum2]);
+        bitset<32> b1(content32);
+        bitset<32> b2(reg32);
+        string content32str = b1.to_string();
+        string reg32str = b2.to_string();
+        string toRegisterstr = "";
+        for(int i=0;i<32;i++)
+        {
+            if(content32str[i]=='0'&&reg32str[i]=='0')
+            {
+                toRegisterstr = toRegisterstr + '0';
+            }
+            else
+            {
+                toRegisterstr = toRegisterstr + '1';
+            }
+        }
+        bitset<32> b3(toRegisterstr);
+        uint64_t toRegister = static_cast<uint64_t>(b3.to_ulong());
+        rgster[rNum1]=toRegister;
+        return;
+    }
+    else
+    {
+        uint64_t content64 = maskedContent;
+        uint64_t reg64 = rgster[rNum2];
+        bitset<64> b1(content64);
+        bitset<64> b2(reg64);
+        string content64str = b1.to_string();
+        string reg64str = b2.to_string();
+        string toRegisterstr = "";
+        for(int i=0;i<64;i++)
+        {
+            if(content64str[i]=='0'&&reg64str[i]=='0')
+            {
+                toRegisterstr = toRegisterstr + '0';
+            }
+            else
+            {
+                toRegisterstr = toRegisterstr + '1';
+            }
+        }
+        bitset<64> b3(toRegisterstr);
+        uint64_t toRegister = b3.to_ulong();
+        rgster[rNum1]=toRegister;
+        return;
+    }
+}
+    /*
     if(s[0]=='0')
     {
         int leadLoc = 5;
@@ -727,7 +902,7 @@ void ORR(string s)
             rgster[rNum1]=static_cast<uint64_t>(ret);
         }
     }
-}
+    */
 //getting opcode works
 string opcode(uint64_t addr) 
 {
