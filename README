@@ -1,19 +1,4 @@
-Due:
-    test: 2/10/2024 @ 11:59pm
-    code: 2/12/2024 @ 11:59pm
-
-Objectives:
-~~~~~~~~~~~
-
-    - Become familiar with emulators and AArch64
-
-Assignment:
-~~~~~~~~~~~
-
-    - Implement an emulator for a small subset of the AArch64 ISA
-    - Donate a test
-    - Answer the questions in REPORT.txt
-
+ARM instruction set that emulates a set of instructions
 Instructions to emulate:
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -54,42 +39,6 @@ Emulator behavior:
    - Any attempt to decode an unknown instructions (outside the set above)
      causes the emulator to print an appropriate error message and dump
      the contents of all 32 registers (see t0.ok for exact format)
-
-Important files:
-~~~~~~~~~~~~~~~~
-
-    *.cxx   C++ files
-    *.c     C files, feel free to add them, remove them, edit them, etc.
-    *.h     header files, feel free to add them, remove them, edit them, etc.
-
-How to add your test:
-~~~~~~~~~~~~~~~~~~~~~
-
-    To add your test, create 2 files:
-
-       <your CSID>.arm     contains the fun program
-       <your CSID>.ok      contains the expected output
-
-    Don't forget to commit them to git (for example):
-
-       git add <your CSID>.arm <your CSID>.ok # add the files
-       git commit -a -m "added test"          # commit your change locally
-       git push                               # push to server
-    
-Generated files:
-~~~~~~~~~~~~~~~~
-
-    for each test:
-
-        <test>.out    output from running the test
-        <test>.diff   differences between the actual and expected output
-        <test>.result pass/fail
-
-To get notifications (will be sent to <your csid>@cs.utexas.edu):
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Add an empty file named "spamon" in your project directory. Don't forget
-to "git add", "git commit", "git push"
 
 To run tests:
 ~~~~~~~~~~~~~
